@@ -124,6 +124,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Conway%27s Game of Life\Cell.cpp" />
+    <ClCompile Include="..\Conway%27s Game of Life\CellGrid.cpp" />
+    <ClCompile Include="..\Conway%27s Game of Life\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Conway%27s Game of Life\Cell.h" />
+    <ClInclude Include="..\Conway%27s Game of Life\CellGrid.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
