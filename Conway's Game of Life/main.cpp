@@ -5,8 +5,8 @@
 
 int main()
 {
-	gol::CellGrid cellGrid(30, 30);
-	cellGrid.putVerticalPropeller(1, 29);
+	gol::CellGrid cellGrid(30, 10);
+	cellGrid.putGlider(0, 0);
 	
 	cellGrid.print();
 	getchar();

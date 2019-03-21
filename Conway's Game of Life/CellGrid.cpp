@@ -50,17 +50,34 @@ void gol::CellGrid::updateOnce()
 
 			for (int neighbourRow = cellRow - 1; neighbourRow < cellRow + 2; neighbourRow++)
 			{
-				if (neighbourRow < 0 || neighbourRow >= rowCount)
-					continue;
+				int originalNeighbourRow = neighbourRow;
+				
+				if (neighbourRow == -1)
+					neighbourRow = rowCount - 1;
+
+				if (neighbourRow == rowCount)
+					neighbourRow = 0;
 
 				for (int neighbourColumn = cellColumn - 1; neighbourColumn < cellColumn + 2; neighbourColumn++)
 				{
-					if (neighbourColumn < 0 || neighbourColumn >= columnCount || (cellRow == neighbourRow && cellColumn == neighbourColumn))
+					int originalNeighbourColumn = neighbourColumn;
+					
+					if (cellRow == neighbourRow && cellColumn == neighbourColumn)
 						continue;
+
+					if (neighbourColumn == -1)
+						neighbourColumn = columnCount - 1;
+
+					if (neighbourColumn == columnCount) 
+						neighbourColumn = 0;
 
 					if (previousGridState[neighbourRow][neighbourColumn].isAlive())
 						aliveNeighbours++;
+
+					neighbourColumn = originalNeighbourColumn;
 				}
+
+				neighbourRow = originalNeighbourRow;
 			}
 
 			if (previousGridState[cellRow][cellColumn].isAlive() && (aliveNeighbours <= 1 || aliveNeighbours >= 4))
