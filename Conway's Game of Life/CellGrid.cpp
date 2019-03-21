@@ -40,7 +40,7 @@ void gol::CellGrid::print()
 
 void gol::CellGrid::updateOnce()
 {
-	std::vector<std::vector<Cell>> tmpGrid(grid);
+	std::vector<std::vector<Cell>> previousGridState(grid);
 
 	for (int cellRow = 0; cellRow < rowCount; cellRow++)
 	{
@@ -58,15 +58,15 @@ void gol::CellGrid::updateOnce()
 					if (neighbourColumn < 0 || neighbourColumn >= columnCount || (cellRow == neighbourRow && cellColumn == neighbourColumn))
 						continue;
 
-					if (tmpGrid[neighbourRow][neighbourColumn].isAlive())
+					if (previousGridState[neighbourRow][neighbourColumn].isAlive())
 						aliveNeighbours++;
 				}
 			}
 
-			if (tmpGrid[cellRow][cellColumn].isAlive() && (aliveNeighbours <= 1 || aliveNeighbours >= 4))
+			if (previousGridState[cellRow][cellColumn].isAlive() && (aliveNeighbours <= 1 || aliveNeighbours >= 4))
 				grid[cellRow][cellColumn].kill();
 
-			if (!tmpGrid[cellRow][cellColumn].isAlive() && aliveNeighbours == 3)
+			if (!previousGridState[cellRow][cellColumn].isAlive() && aliveNeighbours == 3)
 				grid[cellRow][cellColumn].revive();
 		}
 	}
@@ -90,7 +90,7 @@ void gol::CellGrid::reviveCell(int row, int column)
 
 bool gol::CellGrid::putHorizontalPropeller(int row, int column)
 {
-	if (row + 3 > rowCount) return false;
+	if (column + 3 > columnCount) return false;
 	
 	if (row < 0 || row >= rowCount) row = 0;
 	if (column < 0 || column >= columnCount) column = 0;
@@ -104,7 +104,7 @@ bool gol::CellGrid::putHorizontalPropeller(int row, int column)
 
 bool gol::CellGrid::putVerticalPropeller(int row, int column)
 {
-	if (column + 3 > columnCount) return false;
+	if (row + 3 > rowCount) return false;
 	
 	if (row < 0 || row >= rowCount) row = 0;
 	if (column < 0 || column >= columnCount) column = 0;
