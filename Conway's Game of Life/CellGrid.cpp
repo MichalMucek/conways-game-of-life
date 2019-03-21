@@ -72,6 +72,12 @@ void gol::CellGrid::updateOnce()
 	}
 }
 
+void gol::CellGrid::updateManyTimes(int updateIterationsCount)
+{
+	for (int i = 0; i < updateIterationsCount; i++)
+		updateOnce();
+}
+
 void gol::CellGrid::killCell(int row, int column)
 {
 	grid[row][column].kill();
@@ -80,4 +86,46 @@ void gol::CellGrid::killCell(int row, int column)
 void gol::CellGrid::reviveCell(int row, int column)
 {
 	grid[row][column].revive();
+}
+
+bool gol::CellGrid::putHorizontalPropeller(int row, int column)
+{
+	if (row + 3 > rowCount) return false;
+	
+	if (row < 0 || row >= rowCount) row = 0;
+	if (column < 0 || column >= columnCount) column = 0;
+
+	reviveCell(row, column); 
+	reviveCell(row, column + 1); 
+	reviveCell(row, column + 2);
+
+	return true;
+}
+
+bool gol::CellGrid::putVerticalPropeller(int row, int column)
+{
+	if (column + 3 > columnCount) return false;
+	
+	if (row < 0 || row >= rowCount) row = 0;
+	if (column < 0 || column >= columnCount) column = 0;
+
+	reviveCell(row, column);
+	reviveCell(row + 1, column);
+	reviveCell(row + 2, column);
+
+	return true;
+}
+
+bool gol::CellGrid::putGlider(int row, int column)
+{
+	if (row + 3 > rowCount || column + 3 > columnCount) return false;
+	
+	if (row < 0 || row >= rowCount) row = 0;
+	if (column < 0 || column >= columnCount) column = 0;
+
+	killCell(row, column); reviveCell(row, column + 1); killCell(row, column + 2);
+	killCell(row + 1, column); killCell(row + 1, column + 1); reviveCell(row + 1, column + 2);
+	reviveCell(row + 2, column); reviveCell(row + 2, column + 1); reviveCell(row + 2, column + 2);
+
+	return true;
 }
