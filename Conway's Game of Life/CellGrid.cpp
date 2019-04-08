@@ -1,8 +1,104 @@
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <string>
 
 #include "CellGrid.h"
+#include "RLE.h"
 
+namespace fs = std::filesystem;
+namespace rle = runLengthEncoding;
+
+
+gol::CellGrid::CellGrid()
+{
+	setWithDefaultSizeAndPattern();
+}
+
+void gol::CellGrid::setWithDefaultSizeAndPattern()
+{
+	this->rowCount = 5;
+	this->columnCount = 5;
+	this->grid.resize(rowCount, std::vector<Cell>(columnCount));
+	this->putVerticalPropeller(1, 2);
+}
+
+gol::CellGrid::CellGrid(fs::path filepath)
+{
+	std::fstream patternFile;
+	std::string encodedPatternString;
+	std::string decodedPatternString;
+
+	if (fs::exists(filepath) && fs::is_regular_file(filepath))
+	{
+		patternFile.open(filepath.c_str(), std::ios::in);
+
+		if (patternFile.good())
+		{
+			setRowCountFromPatternFileAndMovePositionPointerColumnCount(patternFile);
+			setColumnCountFromPatternFileAndMovePositionPointerToEncodedPatternString(patternFile);
+			updateSize();
+
+			encodedPatternString = getEncodedPatternStringFromPatternFile(patternFile);
+			decodedPatternString = rle::decode(encodedPatternString);
+
+			setCellsStateFromPatternString(decodedPatternString);
+
+			patternFile.close();
+		}
+	}
+	else
+	{
+		setWithDefaultSizeAndPattern();
+
+		std::cout << "!!! ERROR: FAILED READING PATTERN FILE !!!" << std::endl
+			<< "*** INFO: DEFAULT GRID WAS LOADED ***" << std::endl;
+
+		system("pause");
+	}
+}
+
+void gol::CellGrid::setRowCountFromPatternFileAndMovePositionPointerColumnCount(std::fstream &patternFile)
+{
+	patternFile >> this->rowCount;
+}
+
+void gol::CellGrid::setColumnCountFromPatternFileAndMovePositionPointerToEncodedPatternString(std::fstream &patternFile)
+{
+	patternFile >> this->columnCount;
+}
+
+void gol::CellGrid::updateSize()
+{
+	this->grid.resize(this->rowCount, std::vector<Cell>(this->columnCount));
+}
+
+std::string gol::CellGrid::getEncodedPatternStringFromPatternFile(std::fstream &patternFile)
+{
+	std::string encodedPatternString;
+
+	patternFile >> encodedPatternString;
+
+	return encodedPatternString;
+}
+
+void gol::CellGrid::setCellsStateFromPatternString(std::string patternString)
+{
+	for (int row = 0, characterIndex = 0; row < rowCount; row++)
+	{
+		for (int column = 0; column < columnCount; column++, characterIndex++)
+		{
+			if (characterIndex < (int)patternString.size())
+			{
+				if (patternString[characterIndex] == 'A')
+					reviveCell(row, column);
+
+				if (patternString[characterIndex] == 'D')
+					killCell(row, column);
+			}
+		}
+	}
+}
 
 gol::CellGrid::CellGrid(int rowCount, int columnCount)
 {
@@ -13,9 +109,22 @@ gol::CellGrid::CellGrid(int rowCount, int columnCount)
 
 gol::CellGrid::~CellGrid()
 {
+	std::fstream gridLastStateFile;
+	std::string rlePatternCode = "";
+
+	gridLastStateFile.open("gridLastState.txt", std::ios::out);
+
+	if (gridLastStateFile.good())
+	{
+		gridLastStateFile << this->rowCount << " " << this->columnCount << "\n";
+
+		gridLastStateFile << rle::encode(this->getPatternString());
+
+		gridLastStateFile.close();
+	}
 }
 
-void gol::CellGrid::print()
+void gol::CellGrid::printToStandardOutput()
 {
 	std::string gridView = "";
 
@@ -145,4 +254,22 @@ bool gol::CellGrid::putGlider(int row, int column)
 	reviveCell(row + 2, column); reviveCell(row + 2, column + 1); reviveCell(row + 2, column + 2);
 
 	return true;
+}
+
+std::string gol::CellGrid::getPatternString()
+{
+	std::string patternString = "";
+
+	for (int row = 0; row < rowCount; row++)
+	{
+		for (int column = 0; column < columnCount; column++)
+		{
+			if (grid[row][column].isAlive())
+				patternString += "A";
+			else
+				patternString += "D";
+		}
+	}
+	
+	return patternString;
 }

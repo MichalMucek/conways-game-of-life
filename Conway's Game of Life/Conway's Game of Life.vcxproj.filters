@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Pattern RLE files">
+      <UniqueIdentifier>{d98ca1cf-695b-453e-abc4-72e6ec975fbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Conway%27s Game of Life\main.cpp">
@@ -24,6 +27,9 @@
     <ClCompile Include="..\Conway%27s Game of Life\CellGrid.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="..\Conway%27s Game of Life\RLE.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Conway%27s Game of Life\Cell.h">
@@ -32,5 +38,22 @@
     <ClInclude Include="..\Conway%27s Game of Life\CellGrid.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="..\Conway%27s Game of Life\RLE.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="5x5_vertical_propeller.txt">
+      <Filter>Pattern RLE files</Filter>
+    </Text>
+    <Text Include="..\Conway%27s Game of Life\20x10_glider.txt">
+      <Filter>Pattern RLE files</Filter>
+    </Text>
+    <Text Include="..\Conway%27s Game of Life\gridLastState.txt">
+      <Filter>Pattern RLE files</Filter>
+    </Text>
+    <Text Include="..\Conway%27s Game of Life\30x12_copperhead.txt">
+      <Filter>Pattern RLE files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

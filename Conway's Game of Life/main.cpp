@@ -1,20 +1,29 @@
 #include <cstdio>
+#include <filesystem>
 
 #include "CellGrid.h"
 
+namespace fs = std::filesystem;
 
 int main()
 {
-	gol::CellGrid cellGrid(30, 10);
-	cellGrid.putGlider(0, 0);
+	fs::path lastStatePath("gridLastState.txt");
+	fs::path Copperhead_30x12_Path("30x12_copperhead.txt");
+	gol::CellGrid cellGrid;
 	
-	cellGrid.print();
-	getchar();
+	if (fs::exists(lastStatePath) && fs::is_regular_file(lastStatePath))
+		cellGrid = gol::CellGrid(lastStatePath);
+	else
+		cellGrid = gol::CellGrid(Copperhead_30x12_Path);
+	
+	cellGrid.printToStandardOutput();
+	std::getchar();
 
-	while (true)
+	for (int i = 0; i < 50; i++)
 	{
 		cellGrid.updateOnce();
-		cellGrid.print();
-		//getchar();
+		cellGrid.printToStandardOutput();
 	}
+
+	return 0;
 }

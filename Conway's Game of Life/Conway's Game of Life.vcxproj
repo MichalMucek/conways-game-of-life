@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -90,9 +90,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\boost_1_69_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <AdditionalLibraryDirectories>D:\boost_1_69_0\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,10 +130,18 @@
     <ClCompile Include="..\Conway%27s Game of Life\Cell.cpp" />
     <ClCompile Include="..\Conway%27s Game of Life\CellGrid.cpp" />
     <ClCompile Include="..\Conway%27s Game of Life\main.cpp" />
+    <ClCompile Include="..\Conway%27s Game of Life\RLE.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Conway%27s Game of Life\Cell.h" />
     <ClInclude Include="..\Conway%27s Game of Life\CellGrid.h" />
+    <ClInclude Include="..\Conway%27s Game of Life\RLE.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Conway%27s Game of Life\20x10_glider.txt" />
+    <Text Include="..\Conway%27s Game of Life\30x12_copperhead.txt" />
+    <Text Include="..\Conway%27s Game of Life\gridLastState.txt" />
+    <Text Include="5x5_vertical_propeller.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
